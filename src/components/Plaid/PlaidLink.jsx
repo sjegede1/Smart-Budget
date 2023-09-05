@@ -1,19 +1,22 @@
 import axios from 'axios'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { usePlaidLink } from "react-plaid-link";
+import { AuthContext } from '../../contexts/auth_context';
+import { DBContext } from '../../contexts/db_context';
 
-const API_ROUTE = 'http://localhost:8080'
 
 function PlaidLink({linkReady, linkToken}) {
   const [publicTokenReady,setPublicTokenReady] = useState(false)
   // TODO: import email state from context
-  const [uid, setUid] = useState('sola-jegede')
+  const {uid} = useContext(AuthContext)
+  const {API_HOST} = useContext(DBContext)
+  // const [uid, setUid] = useState("DligyMKiXpZMaeeDQvfuf5Yyfsp1")
 
   const onSuccess = useCallback((public_token, metadata) => {
     const handlePublicExchange = async () => {
       try {
         const res = await axios({
-          url: `${API_ROUTE}/api/set_access_token`,
+          url: `${API_HOST}/api/set_access_token`,
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -29,7 +32,7 @@ function PlaidLink({linkReady, linkToken}) {
     }
     handlePublicExchange()
 
-  },[publicTokenReady])
+  },[publicTokenReady, uid])
 
   const onExit = useCallback((error, metadata) => {
     console.log('ONEXIT ERROR:', error)
@@ -43,6 +46,8 @@ function PlaidLink({linkReady, linkToken}) {
   }
 
   const {open, ready} = usePlaidLink(config)
+
+
 
   return (
     <button onClick={()=>{open()}} disabled={!ready}>

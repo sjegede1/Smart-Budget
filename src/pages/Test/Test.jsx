@@ -2,6 +2,7 @@ import React from 'react'
 import TestPlaid from '../../components/Test/TestPlaid'
 import SignUp from '../../components/Auth/SignUp'
 import Logout from '../../components/Auth/Logout'
+import SignIn from '../../components/Auth/SignIn'
 
 
 function Test() {

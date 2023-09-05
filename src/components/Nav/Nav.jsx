@@ -14,6 +14,9 @@ function Nav() {
         <Link to="/auth">
           Login/SignUp
         </Link> &nbsp; | &nbsp;
+        <Link to="/test">
+          Test
+        </Link> &nbsp; | &nbsp;
         <Logout />
     </nav>
   )

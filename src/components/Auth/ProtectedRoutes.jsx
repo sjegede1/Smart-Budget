@@ -1,15 +1,25 @@
-import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, Outlet } from "react-router-dom";
+import { AuthContext } from "../../contexts/auth_context";
 
 function ProtectedRoutes() {
-    // TODO: Import uid from context auth
-    const [uid, setUid] = useState(1)
+    const {uid, verifyToken} = useContext(AuthContext)
 
+    console.log('ProtectedRoutes.jsx',uid)
+
+    useEffect(() => {
+      verifyToken()
+    })
+
+    // TODO: Use user for pretected routes
   //If token saved in cookies redirect to protected route
   return uid ? (
     <Outlet />
   ) : (
-    <h1>You are not authorized to see this page!!</h1>
+    <div>
+      <h1>You are not logged in</h1>
+      <Link to='/auth'>Log In</Link>
+    </div>
   );
 }
 

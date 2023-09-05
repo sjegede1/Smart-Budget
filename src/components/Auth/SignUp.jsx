@@ -1,8 +1,9 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { DBContext } from '../../contexts/db_context'
+import { AuthContext } from '../../contexts/auth_context'
 
-const APP_HOST = 'http://localhost:8080'
 
 function SignUp() {
     const [formData, setFormData] = useState({
@@ -11,7 +12,9 @@ function SignUp() {
         password1: ''
     })
     const [passwordMatch, setPasswordMatch] = useState(false)
-    const navigation = useNavigate()
+    const navigate = useNavigate()
+    const {API_HOST} = useContext(DBContext)
+    const {saveCredentials} = useContext(AuthContext)
 
     const checkPasswordMatch = () => {
         if (formData.password === '' || formData.password1 === '') {
@@ -33,11 +36,11 @@ function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const res = await axios.post(APP_HOST+'/api/signup', formData)
-            emailExistsError(res.data)
+            const res = await axios.post(`${API_HOST}/api/signup`, formData)
+            // emailExistsError(res.data)
+            saveCredentials(res.data)
             console.log(res.data)
-            Navigate("/")
-            // TODO: Save JWT to local storage
+            // navigate("/")
         } catch (err) {
             console.error(err)
         }

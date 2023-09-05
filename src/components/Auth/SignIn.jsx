@@ -1,14 +1,17 @@
 import axios from 'axios'
-import React, { useState } from 'react'
-
-const API_ROUTE = 'http://localhost:8080'
-
+import React, { useContext, useState } from 'react'
+import { AuthContext } from '../../contexts/auth_context'
+import { useNavigate } from 'react-router-dom'
+import { DBContext } from '../../contexts/db_context'
 
 function SignIn() {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     })
+    const {saveCredentialsFromEmail} = useContext(AuthContext)
+    const {API_HOST} = useContext(DBContext)
+    const navigate = useNavigate()
 
     const handleChange = (e) => {
         setFormData({
@@ -21,16 +24,13 @@ function SignIn() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const res = await axios.post(`${API_ROUTE}/api/login`, formData)
+            const res = await axios.post(`${API_HOST}/api/login`, formData)
             const data = res.data
-            if (data.JWT) {
-                //TODO: Make this more programmatic and refator to more efficient code
-                // ONce logged in redirect to Budget page
-                localStorage.setItem('JWT',data.JWT) 
-            } 
-            console.log(res.data)
+            await saveCredentialsFromEmail(data)
+            console.log(data)
+            navigate("/")
         } catch (err) {
-            console.error(err.response)
+            console.error(err)
             // TODO: function to handle bad login credentials
         }
     }

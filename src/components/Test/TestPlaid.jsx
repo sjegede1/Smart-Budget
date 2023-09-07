@@ -2,18 +2,20 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import PlaidLink from '../Plaid/PlaidLink'
 import { AuthContext } from '../../contexts/auth_context'
+import { DBContext } from '../../contexts/db_context'
 
 function TestPlaid() {
     // Set UID here and pass it to PlaidLink as prop
     const linkTokenText = useRef(null)
-    const [formData, setFormData] = useState({})
+    // const [formData, setFormData] = useState({})
     const [linkReady, setLinkReady] = useState(false)
     const [linkToken, setLinkToken] = useState('')
     // const [userID, setUserID] = useState('')
     const {uid}  = useContext(AuthContext)
+    const {API_HOST} = useContext(DBContext)
 
     const [accessToken, setAccessToken] = useState('')
-    const API_HOST = 'http://localhost:8080'
+    // const API_HOST = 'http://localhost:8080'
 
 
     const getToken = async (e) => {
@@ -50,26 +52,20 @@ function TestPlaid() {
     }
 
     useEffect(() => {
-        linkTokenText.current.innerHTML = `Link Token: ${linkReady ? 'ready' : 'not ready'}`
+        // linkTokenText.current.innerHTML = `Link Token: ${linkReady ? 'ready' : 'not ready'}`
         console.log(linkToken)
     }, [linkReady, linkToken])
 
     return (
         <>
             <form onSubmit={getToken} className="get-link">
-                <label htmlFor="user_id">username: </label>
-                <input type="text" name="user_id" id="user_id" onChange={handleChange} />
-                <input type="submit" value="get link token" />
+                {/* <label htmlFor="user_id">username: </label>
+                <input type="text" name="user_id" id="user_id" onChange={handleChange} /> */}
+                <input type="submit" value="Add a new Bank Account" />
             </form>
-            <p className="link-token" ref={linkTokenText}></p>
-            <br /><br />
+            {/* <p className="link-token" ref={linkTokenText}></p>
+            <br /><br /> */}
             <PlaidLink linkReady={linkReady} linkToken={linkToken}/>
-            <br /><br />
-            <form onSubmit={handleDeleteToken}>
-                <label htmlFor="access-token"></label>
-                <input type="text" name="access-token" id="access-token" onChange={updateAccessToken} /><br />
-                <input type="submit" value="delete access token" />
-            </form>
         </>
     )
 }

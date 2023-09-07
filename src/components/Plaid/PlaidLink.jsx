@@ -8,6 +8,7 @@ import { DBContext } from '../../contexts/db_context';
 function PlaidLink({linkReady, linkToken}) {
   const [publicTokenReady,setPublicTokenReady] = useState(false)
   // TODO: import email state from context
+
   const {uid} = useContext(AuthContext)
   const {API_HOST} = useContext(DBContext)
   // const [uid, setUid] = useState("DligyMKiXpZMaeeDQvfuf5Yyfsp1")
@@ -51,7 +52,7 @@ function PlaidLink({linkReady, linkToken}) {
 
   return (
     <button onClick={()=>{open()}} disabled={!ready}>
-      Launch Link
+      Authenticate Bank Login
     </button>
   )
 }

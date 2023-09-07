@@ -1,0 +1,13 @@
+.budget-item-list {
+    border: solid black;
+    margin: 1em;
+    padding: 1em;
+    display: flex;
+
+}
+
+.budget-item-transactions-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}

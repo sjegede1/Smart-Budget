@@ -1,0 +1,20 @@
+.create-budget-item {
+    
+}
+
+div.show-budget-item {
+    border: solid green;
+    margin: 1em;
+    padding: 1em;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+form.show-budget-item {
+    width: fit-content;
+    border: solid lightgrey;
+    padding: 1em
+}

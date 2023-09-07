@@ -7,8 +7,9 @@ function DBContextProvider({ children }) {
     const [transactions, setTransactions] = useState([])
     const [month, setMonth] = useState(new Date().getMonth())
     const [year, setYear] = useState(new Date().getFullYear())
-    const [budgets, setBudgets] = useState([])
+    const [budget, setBudget] = useState([])
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    const [accounts, setAccounts] = useState([])
 
     // SANDBOX
     const API_HOST = "http://localhost:8080"
@@ -41,20 +42,79 @@ function DBContextProvider({ children }) {
         })
     }
 
-    // ============= BUDGET CRUD ACTIONS ===============
-    const addBudgetItem = (name, uid) => {
-        const data = {
-            uid,
-            itemName,
-
-        }
+    const syncTransactions = async (uid) => {
         try {
-            const response = axios.post(`${API_HOST}/api/addBudgetItem`,{
-                uid, itemName,
-                month, year,
-            })
-        } catch (error) {
-            
+            const response = await axios.post(`${API_HOST}/api/sync-transactions`, { uid })
+            console.log(response.data)
+        } catch (err) {
+            console.error(err)
+            // throw err 
+        }
+    }
+
+    // ============= BUDGET CRUD ACTIONS ===============
+    const getBudget = async (uid) => {
+        const params = { month: monthNames[month], year, uid }
+        try {
+            const response = await axios.get(`${API_HOST}/api/budget`, { params });
+            setBudget(response.data)
+            console.log(response.data)
+        } catch (err) {
+            console.error(err);
+            // throw err
+        }
+    }
+
+    const createOrUpdateBudget = async (budgetData, uid) => {
+        const params = { uid }
+        try {
+            const response = await axios.post(`${API_HOST}/api/budget`, {
+                params,
+                data: budgetData
+            });
+            setBudget(response.data)
+            console.log(response.data)
+        } catch (err) {
+            console.error(err);
+            // throw err
+        }
+    }
+
+    const assignTransactionToBudgetItem = async (transaction, budgetItem, uid) => {
+        // const params = {uid}
+        // const data = {month, year, budgetItem, transaction}
+        try {
+            const response = await axios.post(`${API_HOST}/api/budget-transaction/${uid}`, { month: monthNames[month], year, budgetItem, transaction })
+            return response.data
+        } catch (err) {
+            console.error(err)
+            // throw err 
+        }
+    }
+    const removeTransactionToBudgetItem = async (transaction, budgetItem, uid) => {
+        // const params = {uid}
+        // const data = {month, year, budgetItem, transaction}
+        try {
+            const response = await axios.delete(`${API_HOST}/api/budget-transaction/${uid}`, { data: { month: monthNames[month], year, budgetItem, transaction } })
+            return response.data
+        } catch (err) {
+            console.error(err)
+            // throw err 
+        }
+    }
+
+
+
+
+    // ACCOUNTS FOR CURRENT BALANCE
+    const readAccounts = async (uid) => {
+        try {
+            const response = await axios.get(`${API_HOST}/api/accounts/${uid}`)
+            setAccounts(response.data)
+            return response.data
+        } catch (err) {
+            console.error(err)
+            // throw err 
         }
     }
 
@@ -62,8 +122,10 @@ function DBContextProvider({ children }) {
     return (
         <DBContext.Provider value={{
             transactions, setTransactions, getTransactions,
-            budgets, setBudgets,API_HOST, month, setMonth, year, setYear,
-            monthNames
+            budget, setBudget, API_HOST, month, setMonth, year, setYear,
+            monthNames, syncTransactions, getBudget, createOrUpdateBudget,
+            assignTransactionToBudgetItem, removeTransactionToBudgetItem,
+            accounts, setAccounts, readAccounts
         }}>
             {children}
         </DBContext.Provider>

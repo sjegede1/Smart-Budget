@@ -1,0 +1,11 @@
+.transactions-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.transactions-list-container {
+    border: solid black;
+    margin: 1em;
+    padding: 1em;
+}

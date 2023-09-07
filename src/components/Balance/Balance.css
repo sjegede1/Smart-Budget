@@ -1,0 +1,13 @@
+.balance {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.account {
+    border: solid blue;
+    width: 300px;
+    margin: 1em;
+    padding: 0.5em;
+    border-radius: 10px;
+}

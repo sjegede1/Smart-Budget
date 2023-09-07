@@ -14,7 +14,7 @@ function SignUp() {
     const [passwordMatch, setPasswordMatch] = useState(false)
     const navigate = useNavigate()
     const {API_HOST} = useContext(DBContext)
-    const {saveCredentials} = useContext(AuthContext)
+    const {saveCredentialsFromEmail} = useContext(AuthContext)
 
     const checkPasswordMatch = () => {
         if (formData.password === '' || formData.password1 === '') {
@@ -38,9 +38,9 @@ function SignUp() {
         try {
             const res = await axios.post(`${API_HOST}/api/signup`, formData)
             // emailExistsError(res.data)
-            saveCredentials(res.data)
+            saveCredentialsFromEmail(res.data)
             console.log(res.data)
-            // navigate("/")
+            navigate("/")
         } catch (err) {
             console.error(err)
         }

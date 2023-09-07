@@ -12,9 +12,9 @@ function DBContextProvider({ children }) {
     const [accounts, setAccounts] = useState([])
 
     // SANDBOX
-    const API_HOST = "http://localhost:8080"
+    // const API_HOST = "http://localhost:8080"
     // DEVELOPMENT
-    // const API_HOST="https://plaid-api-dev.vercel.app"
+    const API_HOST="https://plaid-api-dev.vercel.app"
 
     // ============= TRANSACTIONS CRUD ACTIONS ==================
     const getTransactions = async (uid) => {
